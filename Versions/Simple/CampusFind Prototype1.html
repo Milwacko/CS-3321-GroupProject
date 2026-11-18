@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFind - CS 3321 Assignment 4</title>
+    <style>
+        /* Plain, barebones CSS matching Assignment 1 wireframes */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #111111;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top Header matching Assignment 1 dark blue bar (#2b4c6f) */
+        .top-header {
+            background-color: #2b4c6f;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-bottom: 2px solid #1b324a;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .brand-subtitle {
+            font-size: 12px;
+            color: #d8e2ed;
+            margin-left: 8px;
+            font-weight: normal;
+        }
+
+        /* Two Main Tabs Bar */
+        .tab-bar {
+            background-color: #dcdcdc;
+            border-bottom: 1px solid #999999;
+            padding: 8px 16px 0 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 6px;
+        }
+        .tab-btn {
+            background-color: #ececec;
+            color: #222222;
+            border: 1px solid #888888;
+            border-bottom: none;
+            padding: 9px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            background-color: #ffffff;
+            color: #2b4c6f;
+            border-top: 3px solid #2b4c6f;
+            padding-bottom: 10px;
+            margin-bottom: -1px;
+        }
+        .tab-utilities {
+            padding-bottom: 6px;
+            font-size: 12px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 16px;
+            background-color: #ffffff;
+            border-left: 1px solid #cccccc;
+            border-right: 1px solid #cccccc;
+            border-bottom: 1px solid #cccccc;
+            min-height: 85vh;
+        }
+
+        /* Status / Feedback Message Box (replaces alert()) */
+        .status-banner {
+            border: 1px solid #2b4c6f;
+            background-color: #eef4fa;
+            color: #111111;
+            padding: 8px 12px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-banner.error {
+            border-color: #b22222;
+            background-color: #fdeaea;
+            color: #800000;
+        }
+        .status-banner.success {
+            border-color: #2e6f3e;
+            background-color: #eaf6ec;
+            color: #164420;
+        }
+
+        /* Section Boxes */
+        .section-box {
+            border: 1px solid #999999;
+            background-color: #ffffff;
+            padding: 14px;
+            margin-bottom: 18px;
+        }
+        .section-box h2 {
+            margin: 0 0 10px 0;
+            font-size: 17px;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 6px;
+            color: #111111;
+        }
+        .section-note {
+            font-size: 12px;
+            color: #555555;
+            margin-top: -4px;
+            margin-bottom: 10px;
+        }
+
+        /* Forms & Inputs */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        select,
+        textarea {
+            border: 1px solid #666666;
+            padding: 6px 8px;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            width: 100%;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 62px;
+        }
+        .radio-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 10px;
+            padding: 6px 8px;
+            background-color: #f7f7f7;
+            border: 1px solid #cccccc;
+        }
+
+        /* Plain Buttons */
+        button, .btn {
+            background-color: #e4e4e4;
+            color: #111111;
+            border: 1px solid #555555;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+        button:hover {
+            background-color: #d4d4d4;
+        }
+        .btn-primary {
+            background-color: #2b4c6f;
+            color: #ffffff;
+            border-color: #1b324a;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            background-color: #213c59;
+        }
+        .btn-approve {
+            background-color: #2e6f3e;
+            color: #ffffff;
+            border-color: #1d4928;
+            font-weight: bold;
+        }
+        .btn-approve:hover {
+            background-color: #235730;
+        }
+        .btn-reject {
+            background-color: #b22222;
+            color: #ffffff;
+            border-color: #7a1515;
+            font-weight: bold;
+        }
+        .btn-reject:hover {
+            background-color: #8f1b1b;
+        }
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        /* Standard Plain HTML Tables */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+        th, td {
+            border: 1px solid #888888;
+            padding: 7px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #e2e2e2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        /* Wireframe Badges matching Assignment 1 (LOST red, FOUND green) */
+        .badge {
+            display: inline-block;
+            padding: 2px 7px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: 1px solid #333333;
+        }
+        .badge-found {
+            background-color: #2e6f3e;
+            color: #ffffff;
+            border-color: #1e4b29;
+        }
+        .badge-lost {
+            background-color: #b22222;
+            color: #ffffff;
+            border-color: #7c1616;
+        }
+        .badge-open {
+            background-color: #eef4fa;
+            color: #1b324a;
+            border-color: #2b4c6f;
+        }
+        .badge-returned {
+            background-color: #e6e6e6;
+            color: #333333;
+            border-color: #777777;
+        }
+
+        .filter-bar {
+            background-color: #f7f7f7;
+            border: 1px solid #cccccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: flex-end;
+        }
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+            flex: 1;
+        }
+        .filter-item label {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-header">
+        <div>
+            <span class="brand-title">CampusFind</span>
+            <span class="brand-subtitle">Lost &amp; Found System</span>
+        </div>
+        <div>
+            <button type="button" onclick="resetDemoData()" class="btn-small">Reset Demo Data</button>
+        </div>
+    </div>
+
+    <!-- TWO MAIN TABS (User Tab vs. Admin Tab) -->
+    <div class="tab-bar">
+        <div class="tab-buttons">
+            <button type="button" id="tab-btn-user" class="tab-btn active" onclick="switchTab('user')">
+                User Tab (Report &amp; View Items)
+            </button>
+            <button type="button" id="tab-btn-admin" class="tab-btn" onclick="switchTab('admin')">
+                Admin Tab (Check, Submit &amp; Mark Returned)
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="container">
+
+        <!-- Feedback / System Status Box -->
+        <div id="status-banner" class="status-banner hidden">
+            <span id="status-text"></span>
+            <button type="button" class="btn-small" onclick="clearStatusBanner()">Close</button>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- TAB 1: USER VIEW                                                  -->
+        <!-- ================================================================= -->
+        <div id="view-user">
+
+            <!-- 1. REPORT A MISSING ITEM -->
+            <div class="section-box">
+                <h2>Report a Missing or Found Item</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="user-item-type">Report Type *</label>
+                        <select id="user-item-type">
+                            <option value="Lost" selected>Lost (Missing Item)</option>
+                            <option value="Found">Found Item</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-item-name">Item Name *</label>
+                        <input type="text" id="user-item-name" placeholder="e.g. Black backpack">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-item-category">Category *</label>
+                        <select id="user-item-category">
+                            <option value="Bags">Bags</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Keys">Keys</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-item-location">Location *</label>
+                        <input type="text" id="user-item-location" placeholder="e.g. Library, 2nd floor">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-item-date">Date *</label>
+                        <input type="date" id="user-item-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-item-desc">Description *</label>
+                        <input type="text" id="user-item-desc" placeholder="Color, brand, details...">
+                    </div>
+                </div>
+                <button type="button" class="btn-primary" onclick="submitItem('user')">Submit Report</button>
+            </div>
+
+            <!-- 2. BROWSE & SEARCH ITEMS -->
+            <div class="section-box">
+                <h2>Reported Items</h2>
+                <div class="filter-bar">
+                    <div class="filter-item" style="flex: 2;">
+                        <label for="search-keyword">Search by Keyword</label>
+                        <input type="text" id="search-keyword" placeholder="Search item name, location, or description..." oninput="renderAll()">
+                    </div>
+                    <div class="filter-item">
+                        <label for="search-category">Category</label>
+                        <select id="search-category" onchange="renderAll()">
+                            <option value="ALL">All Categories</option>
+                            <option value="Bags">Bags</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Keys">Keys</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th style="width: 75px;">Type</th>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Location</th>
+                                <th style="width: 95px;">Date</th>
+                                <th>Description</th>
+                                <th style="width: 95px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-items-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- TAB 2: ADMIN VIEW                                                 -->
+        <!-- ================================================================= -->
+        <div id="view-admin" class="hidden">
+
+            <!-- 1. ADMIN SUBMIT ITEM -->
+            <div class="section-box">
+                <h2>Submit Missing or Found Item (Admin)</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="admin-item-type">Report Type *</label>
+                        <select id="admin-item-type">
+                            <option value="Lost">Lost (Missing Item)</option>
+                            <option value="Found" selected>Found Item</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-item-name">Item Name *</label>
+                        <input type="text" id="admin-item-name" placeholder="e.g. Blue water bottle">
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-item-category">Category *</label>
+                        <select id="admin-item-category">
+                            <option value="Bags">Bags</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Keys">Keys</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-item-location">Location *</label>
+                        <input type="text" id="admin-item-location" placeholder="e.g. Student Center">
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-item-date">Date *</label>
+                        <input type="date" id="admin-item-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-item-desc">Description *</label>
+                        <input type="text" id="admin-item-desc" placeholder="Color, brand, details...">
+                    </div>
+                </div>
+                <button type="button" class="btn-primary" onclick="submitItem('admin')">Add Item</button>
+            </div>
+
+            <!-- 2. ADMIN CHECK ITEMS & MARK AS RETURNED -->
+            <div class="section-box">
+                <h2>Manage Items &amp; Mark as Returned</h2>
+                <div class="filter-bar">
+                    <div class="filter-item">
+                        <label for="admin-filter-status">Filter by Status</label>
+                        <select id="admin-filter-status" onchange="renderAll()">
+                            <option value="ALL">All Items</option>
+                            <option value="Open">Open</option>
+                            <option value="Returned">Returned</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th style="width: 75px;">Type</th>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Location</th>
+                                <th style="width: 95px;">Date</th>
+                                <th>Description</th>
+                                <th style="width: 95px;">Status</th>
+                                <th style="width: 150px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-items-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'CAMPUSFIND_SIMPLE_V2';
+
+        function getInitialDemoState() {
+            return {
+                nextId: 105,
+                items: [
+                    {
+                        id: '101',
+                        type: 'Found',
+                        name: 'Black backpack',
+                        category: 'Bags',
+                        location: 'Library, 2nd floor',
+                        date: '2026-09-24',
+                        description: 'Black North Face backpack with notebooks inside.',
+                        status: 'Open'
+                    },
+                    {
+                        id: '102',
+                        type: 'Lost',
+                        name: 'AirPods case',
+                        category: 'Electronics',
+                        location: 'Student Center',
+                        date: '2026-09-25',
+                        description: 'White charging case lost near food court.',
+                        status: 'Open'
+                    },
+                    {
+                        id: '103',
+                        type: 'Found',
+                        name: 'Car keys (Toyota)',
+                        category: 'Keys',
+                        location: 'Parking Lot C',
+                        date: '2026-09-26',
+                        description: 'Toyota key fob on a blue lanyard.',
+                        status: 'Open'
+                    },
+                    {
+                        id: '104',
+                        type: 'Found',
+                        name: 'Blue water bottle',
+                        category: 'Other',
+                        location: 'Gym',
+                        date: '2026-09-27',
+                        description: 'Metal bottle with a cat sticker.',
+                        status: 'Returned'
+                    }
+                ]
+            };
+        }
+
+        let appState = null;
+
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        }
+
+        function loadState() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                try {
+                    return JSON.parse(raw);
+                } catch (e) {}
+            }
+            return getInitialDemoState();
+        }
+
+        appState = loadState();
+        saveState();
+
+        function getToday() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function showStatus(msg, type) {
+            const banner = document.getElementById('status-banner');
+            const text = document.getElementById('status-text');
+            banner.classList.remove('hidden', 'error', 'success');
+            if (type === 'error') banner.classList.add('error');
+            if (type === 'success') banner.classList.add('success');
+            text.textContent = msg;
+        }
+
+        function clearStatusBanner() {
+            document.getElementById('status-banner').classList.add('hidden');
+        }
+
+        function switchTab(tab) {
+            const userView = document.getElementById('view-user');
+            const adminView = document.getElementById('view-admin');
+            const btnUser = document.getElementById('tab-btn-user');
+            const btnAdmin = document.getElementById('tab-btn-admin');
+
+            if (tab === 'admin') {
+                userView.classList.add('hidden');
+                adminView.classList.remove('hidden');
+                btnUser.classList.remove('active');
+                btnAdmin.classList.add('active');
+            } else {
+                adminView.classList.add('hidden');
+                userView.classList.remove('hidden');
+                btnAdmin.classList.remove('active');
+                btnUser.classList.add('active');
+            }
+            renderAll();
+        }
+
+        function submitItem(prefix) {
+            const type = document.getElementById(prefix + '-item-type').value;
+            const name = document.getElementById(prefix + '-item-name').value.trim();
+            const category = document.getElementById(prefix + '-item-category').value;
+            const location = document.getElementById(prefix + '-item-location').value.trim();
+            const date = document.getElementById(prefix + '-item-date').value || getToday();
+            const desc = document.getElementById(prefix + '-item-desc').value.trim();
+
+            if (!name || !location || !desc) {
+                showStatus('Please fill in Item Name, Location, and Description.', 'error');
+                return;
+            }
+
+            const newItem = {
+                id: String(appState.nextId++),
+                type: type,
+                name: name,
+                category: category,
+                location: location,
+                date: date,
+                description: desc,
+                status: 'Open'
+            };
+
+            appState.items.unshift(newItem);
+            saveState();
+
+            document.getElementById(prefix + '-item-name').value = '';
+            document.getElementById(prefix + '-item-location').value = '';
+            document.getElementById(prefix + '-item-desc').value = '';
+
+            renderAll();
+            showStatus('Submitted ' + type + ' item "' + name + '" (#' + newItem.id + ').', 'success');
+        }
+
+        function toggleReturned(id) {
+            const item = appState.items.find(i => i.id === String(id));
+            if (!item) return;
+
+            item.status = item.status === 'Returned' ? 'Open' : 'Returned';
+            saveState();
+            renderAll();
+            showStatus('Item #' + item.id + ' ("' + item.name + '") marked as ' + item.status + '.', 'success');
+        }
+
+        function resetDemoData() {
+            appState = getInitialDemoState();
+            saveState();
+            renderAll();
+            showStatus('Reset to default demo items.', 'success');
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function renderAll() {
+            // 1. Render User Table
+            const kw = document.getElementById('search-keyword').value.trim().toLowerCase();
+            const cat = document.getElementById('search-category').value;
+
+            const userFiltered = appState.items.filter(item => {
+                const matchKw = !kw ||
+                    item.name.toLowerCase().includes(kw) ||
+                    item.location.toLowerCase().includes(kw) ||
+                    item.description.toLowerCase().includes(kw);
+                const matchCat = cat === 'ALL' || item.category === cat;
+                return matchKw && matchCat;
+            });
+
+            const userTbody = document.getElementById('user-items-tbody');
+            if (userFiltered.length === 0) {
+                userTbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No matching items found.</td></tr>';
+            } else {
+                userTbody.innerHTML = userFiltered.map(item => `
+                    <tr>
+                        <td>#${escapeHtml(item.id)}</td>
+                        <td><span class="badge ${item.type === 'Found' ? 'badge-found' : 'badge-lost'}">${escapeHtml(item.type)}</span></td>
+                        <td><strong>${escapeHtml(item.name)}</strong></td>
+                        <td>${escapeHtml(item.category)}</td>
+                        <td>${escapeHtml(item.location)}</td>
+                        <td>${escapeHtml(item.date)}</td>
+                        <td>${escapeHtml(item.description)}</td>
+                        <td><span class="badge ${item.status === 'Returned' ? 'badge-returned' : 'badge-open'}">${escapeHtml(item.status)}</span></td>
+                    </tr>
+                `).join('');
+            }
+
+            // 2. Render Admin Table
+            const statusFilter = document.getElementById('admin-filter-status').value;
+            const adminFiltered = appState.items.filter(item => {
+                return statusFilter === 'ALL' || item.status === statusFilter;
+            });
+
+            const adminTbody = document.getElementById('admin-items-tbody');
+            if (adminFiltered.length === 0) {
+                adminTbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">No items to display.</td></tr>';
+            } else {
+                adminTbody.innerHTML = adminFiltered.map(item => `
+                    <tr>
+                        <td>#${escapeHtml(item.id)}</td>
+                        <td><span class="badge ${item.type === 'Found' ? 'badge-found' : 'badge-lost'}">${escapeHtml(item.type)}</span></td>
+                        <td><strong>${escapeHtml(item.name)}</strong></td>
+                        <td>${escapeHtml(item.category)}</td>
+                        <td>${escapeHtml(item.location)}</td>
+                        <td>${escapeHtml(item.date)}</td>
+                        <td>${escapeHtml(item.description)}</td>
+                        <td><span class="badge ${item.status === 'Returned' ? 'badge-returned' : 'badge-open'}">${escapeHtml(item.status)}</span></td>
+                        <td>
+                            ${item.status !== 'Returned'
+                                ? `<button type="button" class="btn-approve btn-small" onclick="toggleReturned('${item.id}')">Mark as Returned</button>`
+                                : `<button type="button" class="btn-small" onclick="toggleReturned('${item.id}')">Reopen</button>`
+                            }
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        window.onload = function() {
+            document.getElementById('user-item-date').value = getToday();
+            document.getElementById('admin-item-date').value = getToday();
+            renderAll();
+        };
+    </script>
+</body>
+</html>
