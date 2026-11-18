@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFind - CS 3321 Assignment 4</title>
+    <style>
+        /* Plain, barebones CSS matching Assignment 1 wireframes */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #111111;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top Header matching Assignment 1 dark blue bar (#2b4c6f) */
+        .top-header {
+            background-color: #2b4c6f;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-bottom: 2px solid #1b324a;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .brand-subtitle {
+            font-size: 12px;
+            color: #d8e2ed;
+            margin-left: 8px;
+            font-weight: normal;
+        }
+
+        /* Two Main Tabs Bar */
+        .tab-bar {
+            background-color: #dcdcdc;
+            border-bottom: 1px solid #999999;
+            padding: 8px 16px 0 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 6px;
+        }
+        .tab-btn {
+            background-color: #ececec;
+            color: #222222;
+            border: 1px solid #888888;
+            border-bottom: none;
+            padding: 9px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            background-color: #ffffff;
+            color: #2b4c6f;
+            border-top: 3px solid #2b4c6f;
+            padding-bottom: 10px;
+            margin-bottom: -1px;
+        }
+        .tab-utilities {
+            padding-bottom: 6px;
+            font-size: 12px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 16px;
+            background-color: #ffffff;
+            border-left: 1px solid #cccccc;
+            border-right: 1px solid #cccccc;
+            border-bottom: 1px solid #cccccc;
+            min-height: 88vh;
+        }
+
+        /* Status / Feedback Message Box (replaces alert()) */
+        .status-banner {
+            border: 1px solid #2b4c6f;
+            background-color: #eef4fa;
+            color: #111111;
+            padding: 8px 12px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-banner.error {
+            border-color: #b22222;
+            background-color: #fdeaea;
+            color: #800000;
+        }
+        .status-banner.success {
+            border-color: #2e6f3e;
+            background-color: #eaf6ec;
+            color: #164420;
+        }
+
+        /* Section Boxes */
+        .section-box {
+            border: 1px solid #999999;
+            background-color: #ffffff;
+            padding: 14px;
+            margin-bottom: 18px;
+        }
+        .section-box h2 {
+            margin: 0 0 10px 0;
+            font-size: 17px;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 6px;
+            color: #111111;
+        }
+        .section-note {
+            font-size: 12px;
+            color: #555555;
+            margin-top: -4px;
+            margin-bottom: 10px;
+        }
+
+        /* Forms & Inputs */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        select,
+        textarea {
+            border: 1px solid #666666;
+            padding: 6px 8px;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            width: 100%;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 62px;
+        }
+        .radio-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 10px;
+            padding: 6px 8px;
+            background-color: #f7f7f7;
+            border: 1px solid #cccccc;
+        }
+
+        /* Plain Buttons */
+        button, .btn {
+            background-color: #e4e4e4;
+            color: #111111;
+            border: 1px solid #555555;
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+        button:hover {
+            background-color: #d4d4d4;
+        }
+        .btn-primary {
+            background-color: #2b4c6f;
+            color: #ffffff;
+            border-color: #1b324a;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            background-color: #213c59;
+        }
+        .btn-approve {
+            background-color: #2e6f3e;
+            color: #ffffff;
+            border-color: #1d4928;
+            font-weight: bold;
+        }
+        .btn-approve:hover {
+            background-color: #235730;
+        }
+        .btn-reject {
+            background-color: #b22222;
+            color: #ffffff;
+            border-color: #7a1515;
+            font-weight: bold;
+        }
+        .btn-reject:hover {
+            background-color: #8f1b1b;
+        }
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        /* Standard Plain HTML Tables */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+        th, td {
+            border: 1px solid #888888;
+            padding: 7px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #e2e2e2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        /* Wireframe Badges matching Assignment 1 (LOST red, FOUND green) */
+        .badge {
+            display: inline-block;
+            padding: 2px 7px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: 1px solid #333333;
+        }
+        .badge-found {
+            background-color: #2e6f3e;
+            color: #ffffff;
+            border-color: #1e4b29;
+        }
+        .badge-lost {
+            background-color: #b22222;
+            color: #ffffff;
+            border-color: #7c1616;
+        }
+        .badge-open {
+            background-color: #eef4fa;
+            color: #1b324a;
+            border-color: #2b4c6f;
+        }
+        .badge-pending {
+            background-color: #fff6d9;
+            color: #664d00;
+            border-color: #b38f00;
+        }
+        .badge-returned {
+            background-color: #e6e6e6;
+            color: #333333;
+            border-color: #777777;
+        }
+
+        /* Bar for session & filters */
+        .session-bar {
+            background-color: #f2f5f8;
+            border: 1px solid #99b0c7;
+            padding: 8px 12px;
+            margin-bottom: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .filter-bar {
+            background-color: #f7f7f7;
+            border: 1px solid #cccccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: flex-end;
+        }
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+            flex: 1;
+        }
+        .filter-item label {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        /* Item Details Modal/Panel (Assignment 1 Page 6 Wireframe) */
+        .details-panel {
+            border: 2px solid #2b4c6f;
+            background-color: #f9fbfd;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .wireframe-photo-box {
+            width: 160px;
+            height: 120px;
+            border: 1px solid #777777;
+            background-color: #e4e4e4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 12px;
+            color: #555555;
+            padding: 6px;
+            flex-shrink: 0;
+        }
+        .details-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .claim-box {
+            border: 1px solid #666666;
+            background-color: #ffffff;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        .tip-text {
+            font-style: italic;
+            font-size: 12px;
+            color: #444444;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-header">
+        <div>
+            <span class="brand-title">CampusFind</span>
+            <span class="brand-subtitle">CS 3321 Software Engineering - Assignment 4 Prototype</span>
+        </div>
+        <div>
+            <button type="button" onclick="resetDemoData()" class="btn-small">Reset Demo Data</button>
+        </div>
+    </div>
+
+    <!-- TWO MAIN TABS (User Tab vs. Admin/Staff Tab) -->
+    <div class="tab-bar">
+        <div class="tab-buttons">
+            <button type="button" id="tab-btn-user" class="tab-btn active" onclick="switchTab('user')">
+                Tab 1: User / Student Portal (Report &amp; Claim Items)
+            </button>
+            <button type="button" id="tab-btn-admin" class="tab-btn" onclick="switchTab('admin')">
+                Tab 2: Staff &amp; Admin Portal (Check, Submit &amp; Return Items)
+            </button>
+        </div>
+        <div class="tab-utilities">
+            Office Location: <strong>Student Center Lost &amp; Found Office</strong>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="container">
+
+        <!-- Feedback / System Status Box -->
+        <div id="status-banner" class="status-banner">
+            <span id="status-text">System Ready. Select a tab above to demonstrate Student or Staff/Admin workflows.</span>
+            <button type="button" class="btn-small" onclick="clearStatusBanner()">Dismiss</button>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- TAB 1: USER / STUDENT PORTAL                                      -->
+        <!-- ================================================================= -->
+        <div id="view-user">
+
+            <!-- Active Student Session Bar (UC1 Register & UC2 Log In) -->
+            <div class="session-bar">
+                <div>
+                    <strong>Active Student User (UC2 Session):</strong>
+                    <select id="active-student-select" onchange="AccountUI.switchActiveStudent(this.value)" style="width: auto; display: inline-block; margin-left: 6px;">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div>
+                    <button type="button" class="btn-small" onclick="AccountUI.toggleAuthPanel()">
+                        Login / Create Account (UC1 &amp; UC2)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Collapsible Login & Registration Box (Assignment 1 Page 5 Wireframe) -->
+            <div id="auth-panel" class="section-box hidden">
+                <h2>UC1: Register Account / UC2: Log In (AccountUI &amp; AccountController)</h2>
+                <div class="form-grid">
+                    <!-- UC2 Login -->
+                    <div style="border: 1px solid #cccccc; padding: 10px; background: #fafafa;">
+                        <strong>Log In (Existing User)</strong>
+                        <div class="form-group" style="margin-top: 8px;">
+                            <label for="login-email">University email</label>
+                            <input type="email" id="login-email" placeholder="jsmith@univ.edu">
+                        </div>
+                        <div class="form-group" style="margin-top: 6px;">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" placeholder="password123" value="password123">
+                        </div>
+                        <div style="margin-top: 8px;">
+                            <button type="button" class="btn-primary" onclick="AccountUI.submitLogin()">Log In</button>
+                        </div>
+                    </div>
+
+                    <!-- UC1 Register Account -->
+                    <div style="border: 1px solid #cccccc; padding: 10px; background: #fafafa;">
+                        <strong>New here? Create a Student Account</strong>
+                        <div class="form-group" style="margin-top: 8px;">
+                            <label for="reg-name">Full Name *</label>
+                            <input type="text" id="reg-name" placeholder="e.g. Sarah Connor">
+                        </div>
+                        <div class="form-group" style="margin-top: 6px;">
+                            <label for="reg-email">University Email (@univ.edu required) *</label>
+                            <input type="email" id="reg-email" placeholder="sconnor@univ.edu">
+                        </div>
+                        <div class="form-group" style="margin-top: 6px;">
+                            <label for="reg-password">Password *</label>
+                            <input type="password" id="reg-password" placeholder="Enter password">
+                        </div>
+                        <div style="margin-top: 8px;">
+                            <button type="button" class="btn-primary" onclick="AccountUI.submitRegistration()">Create Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: REPORT A MISSING (LOST) OR FOUND ITEM (UC3) -->
+            <div class="section-box">
+                <h2>1. Report a Missing or Found Item (UC3 - ReportUI &amp; ReportController)</h2>
+                <p class="section-note">
+                    Students can report a missing (Lost) item or an item they Found on campus. Found items are dropped off at the Student Center Lost &amp; Found Office.
+                </p>
+
+                <div class="radio-row">
+                    <strong>I am reporting an item I:</strong>
+                    <label>
+                        <input type="radio" name="user-report-type" value="Lost" checked>
+                        <strong>Lost (Missing Item)</strong>
+                    </label>
+                    <label>
+                        <input type="radio" name="user-report-type" value="Found">
+                        <strong>Found (Turned in to Office)</strong>
+                    </label>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="user-item-name">Item name *</label>
+                        <input type="text" id="user-item-name" placeholder="e.g. Black backpack, Silver MacBook">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-item-category">Category *</label>
+                        <select id="user-item-category">
+                            <option value="Bags">Bags</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Keys">Keys</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Textbooks">Textbooks</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-item-location">Location (where lost/found) *</label>
+                        <select id="user-item-location">
+                            <option value="Library, 2nd floor">Library, 2nd floor</option>
+                            <option value="Student Center">Student Center</option>
+                            <option value="Parking Lot C">Parking Lot C</option>
+                            <option value="Gym">Gym</option>
+                            <option value="Science Building">Science Building</option>
+                            <option value="Engineering Hall">Engineering Hall</option>
+                            <option value="Cafeteria">Cafeteria</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-item-date">Date *</label>
+                        <input type="date" id="user-item-date">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="user-item-desc">Description *</label>
+                        <textarea id="user-item-desc" placeholder="Color, brand, any identifying marks..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-item-photo">Photo reference / filename (optional, JPG/PNG, max 5 MB)</label>
+                        <input type="text" id="user-item-photo" placeholder="e.g. backpack_photo.jpg">
+                        <span style="font-size: 11px; color: #555555; margin-top: 4px;">
+                            Note: Claim evidence is kept private and is not shown in public search results.
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" class="btn-primary" onclick="ReportUI.submitUserReport()">Submit Report</button>
+                    <button type="button" onclick="ReportUI.clearUserForm()">Clear Form</button>
+                </div>
+            </div>
+
+            <!-- SELECTED ITEM DETAILS & CLAIM PANEL (Assignment 1 Page 6 Wireframe) -->
+            <div id="item-details-panel" class="details-panel hidden">
+                <!-- Populated dynamically when user clicks "View / Claim" on an item -->
+            </div>
+
+            <!-- SECTION 2: SEARCH & CLAIM ITEMS (UC4 & UC5) -->
+            <div class="section-box">
+                <h2>2. Search Missing &amp; Found Items / Submit Ownership Claim (UC4 &amp; UC5)</h2>
+                <p class="section-note">
+                    Search posted items by keyword or filter by category. For <strong>FOUND</strong> items, enter proof of ownership to submit a claim.
+                </p>
+
+                <div class="filter-bar">
+                    <div class="filter-item" style="flex: 2;">
+                        <label for="search-keyword">Keyword Search</label>
+                        <input type="text" id="search-keyword" placeholder="Search items (e.g. 'black backpack', 'keys', 'AirPods')" oninput="SearchUI.runSearch()">
+                    </div>
+                    <div class="filter-item">
+                        <label for="search-category">Category</label>
+                        <select id="search-category" onchange="SearchUI.runSearch()">
+                            <option value="ALL">All Categories</option>
+                            <option value="Bags">Bags</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Keys">Keys</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Textbooks">Textbooks</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="search-type">Lost / Found</label>
+                        <select id="search-type" onchange="SearchUI.runSearch()">
+                            <option value="ALL">All (Lost &amp; Found)</option>
+                            <option value="Lost">Lost (Missing)</option>
+                            <option value="Found">Found</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="search-status">Item Status</label>
+                        <select id="search-status" onchange="SearchUI.runSearch()">
+                            <option value="ALL">All Statuses</option>
+                            <option value="Open">Open</option>
+                            <option value="Claim pending">Claim pending</option>
+                            <option value="Returned">Returned</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="button" class="btn-primary" onclick="SearchUI.runSearch()">Search</button>
+                        <button type="button" onclick="SearchUI.resetFilters()">Reset</button>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 70px;">Report #</th>
+                                <th style="width: 80px;">Type</th>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Location</th>
+                                <th style="width: 95px;">Date</th>
+                                <th>Public Description</th>
+                                <th style="width: 115px;">Status</th>
+                                <th style="width: 270px;">Claim / Details Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-items-tbody">
+                            <!-- Populated by SearchUI -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECTION 3: STUDENT EMAIL NOTIFICATIONS LOG (FR8 / EmailGateway) -->
+            <div class="section-box">
+                <h2>3. Student Decision Email Notifications (FR8 - Notification &amp; EmailGateway)</h2>
+                <p class="section-note">
+                    When Lost &amp; Found Staff approve or reject a claim in Tab 2, the system sends an email notification to the student claimant.
+                </p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 90px;">Notif #</th>
+                                <th style="width: 80px;">Claim #</th>
+                                <th>Recipient Student</th>
+                                <th>Item</th>
+                                <th style="width: 95px;">Decision</th>
+                                <th style="width: 95px;">Delivery</th>
+                                <th>Email Message / Pickup Instructions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-notifications-tbody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- TAB 2: STAFF & ADMIN PORTAL                                       -->
+        <!-- ================================================================= -->
+        <div id="view-admin" class="hidden">
+
+            <div class="session-bar">
+                <div>
+                    <strong>Active Staff / Admin Session:</strong>
+                    <span>M. Lopez (Lost &amp; Found Staff - mlopez@univ.edu) &amp; System Administrator (admin@univ.edu)</span>
+                </div>
+                <div>
+                    <span>Office: <strong>Student Center Lost &amp; Found</strong></span>
+                </div>
+            </div>
+
+            <!-- SECTION A: CHECK, SUBMIT & MARK MISSING/FOUND ITEMS AS RETURNED -->
+            <div class="section-box">
+                <h2>1. Check, Submit, and Return Items (Staff / Admin Item Management)</h2>
+                <p class="section-note">
+                    Staff/Admin can log a new missing or found item directly, inspect all active reports, and mark items as <strong>Returned</strong> once picked up.
+                </p>
+
+                <!-- Quick Admin Item Submission Row -->
+                <div style="border: 1px solid #cccccc; background-color: #f9f9f9; padding: 10px; margin-bottom: 12px;">
+                    <strong>Quick Submit Missing / Found Item (Staff Desk Log):</strong>
+                    <div class="form-grid" style="margin-top: 8px; margin-bottom: 6px;">
+                        <div class="form-group">
+                            <label for="admin-item-type">Report Type *</label>
+                            <select id="admin-item-type">
+                                <option value="Lost">Lost (Missing Item)</option>
+                                <option value="Found" selected>Found (Turned in at Desk)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-item-name">Item Name *</label>
+                            <input type="text" id="admin-item-name" placeholder="e.g. Blue HydroFlask, Calculator">
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-item-category">Category *</label>
+                            <select id="admin-item-category">
+                                <option value="Bags">Bags</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Keys">Keys</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Textbooks">Textbooks</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-item-location">Location *</label>
+                            <input type="text" id="admin-item-location" value="Student Center">
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-item-desc">Description / Hidden Verification Detail *</label>
+                            <input type="text" id="admin-item-desc" placeholder="e.g. Has initials 'JD' on back">
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="ReportUI.submitAdminReport()">Submit Item to Database</button>
+                </div>
+
+                <!-- Filter & ID Verification Toggle -->
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px;">
+                    <div>
+                        <label for="admin-filter-status"><strong>Filter Items by Status:</strong></label>
+                        <select id="admin-filter-status" onchange="renderAll()" style="width: auto; display: inline-block; margin-left: 6px;">
+                            <option value="ALL">All Items</option>
+                            <option value="Open">Open</option>
+                            <option value="Claim pending">Claim pending</option>
+                            <option value="Returned">Returned</option>
+                        </select>
+                    </div>
+                    <div style="background-color: #eef4fa; border: 1px solid #2b4c6f; padding: 5px 10px;">
+                        <label style="cursor: pointer;">
+                            <input type="checkbox" id="staff-id-verified-checkbox" checked>
+                            <strong>Student Photo ID Checked at Office Counter</strong> (Guard: <code>[approved claim + ID checked]</code>)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 70px;">Report #</th>
+                                <th style="width: 80px;">Type</th>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Location</th>
+                                <th style="width: 95px;">Date</th>
+                                <th>Reported By</th>
+                                <th style="width: 115px;">Status</th>
+                                <th style="width: 220px;">Staff / Admin Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-items-tbody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECTION B: REVIEW PENDING CLAIMS (UC6 - Assignment 1 Page 6 Wireframe) -->
+            <div class="section-box">
+                <h2 id="pending-claims-heading">2. Pending &amp; Reviewed Ownership Claims (UC6 - StaffClaimsUI &amp; ReviewController)</h2>
+                <p class="section-note">
+                    Staff review ownership evidence submitted by students, Approve or Reject claims (which triggers an automated email), and record item pickup.
+                </p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 75px;">Claim #</th>
+                                <th>Item</th>
+                                <th>Claimed by</th>
+                                <th>Description (Ownership Evidence)</th>
+                                <th style="width: 95px;">Submitted</th>
+                                <th style="width: 105px;">Claim Status</th>
+                                <th style="width: 240px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-claims-tbody">
+                            <!-- Populated by StaffClaimsUI -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tip-text">
+                    Tip: compare the claimant's answer with the hidden detail recorded when the item was turned in.
+                </div>
+            </div>
+
+            <!-- SECTION C: MANAGE USER ACCOUNTS (UC7 - UserAdminUI & UserAdminController) -->
+            <div class="section-box">
+                <h2>3. Manage User Accounts (UC7 - UserAdminUI &amp; UserAdminController)</h2>
+                <p class="section-note">
+                    Administrators can find user accounts, assign the <strong>Staff</strong> role (Make Staff), or Deactivate accounts (FR10).
+                </p>
+
+                <div class="filter-bar">
+                    <div class="filter-item">
+                        <label for="admin-user-search">Find User by University Email or Name</label>
+                        <input type="text" id="admin-user-search" placeholder="e.g. jsmith@univ.edu" oninput="UserAdminUI.renderUsers()">
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">User ID</th>
+                                <th>Name</th>
+                                <th>University Email</th>
+                                <th style="width: 120px;">Role</th>
+                                <th style="width: 100px;">Account Status</th>
+                                <th style="width: 250px;">Administrator Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-tbody">
+                            <!-- Populated by UserAdminUI -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- APPLICATION LOGIC (Follows Assignment 2 Class & Sequence Diagrams)     -->
+    <!-- ===================================================================== -->
+    <script>
+        /**
+         * CS 3321 - CampusFind Architecture (Assignment 2 Mapping)
+         *
+         * Entity Classes:
+         *  - User (userId, name, universityEmail, passwordHash, role, active, createdAt)
+         *  - ItemReport (reportId, reporterId, type, name, category, location, itemDate, description, photoRef, status)
+         *  - Claim (claimId, reportId, claimantId, evidence, status, submittedAt, reviewerId, decisionAt, returnedAt, returnedBy)
+         *  - Notification (notificationId, claimId, recipientId, decision, deliveryStatus, createdAt, sentAt, message)
+         *
+         * Control Classes:
+         *  - AccountController (register, login, emailExists, validateAndHashPassword)
+         *  - ReportController (postReport, validateFieldsAndPhoto)
+         *  - SearchController (search, findMatchingReports, getDetails)
+         *  - ClaimController (claimItem, checkFoundAndClaimable, checkDuplicate)
+         *  - ReviewController (listPending, review, recordPickup)
+         *  - UserAdminController (findAccount, changeRole, toggleActive)
+         *
+         * Boundary Classes:
+         *  - AccountUI, ReportUI, SearchUI, ClaimUI, StaffClaimsUI, UserAdminUI, EmailGateway
+         */
+
+        const STORAGE_KEY = 'CAMPUSFIND_CS3321_STATE_V1';
+
+        // Default initial database matching Assignment 1 & Assignment 2 wireframes
+        function getInitialDemoState() {
+            return {
+                activeStudentId: 'U-101',
+                selectedReportIdForDetails: null,
+                nextReportNum: 1046,
+                nextClaimNum: 204,
+                nextUserNum: 104,
+                nextNotifNum: 301,
+                users: [
+                    {
+                        userId: 'U-101',
+                        name: 'J. Smith',
+                        universityEmail: 'jsmith@univ.edu',
+                        passwordHash: 'hash_password123',
+                        role: 'Student',
+                        active: true,
+                        createdAt: '2026-09-01'
+                    },
+                    {
+                        userId: 'U-102',
+                        name: 'A. Patel',
+                        universityEmail: 'apatel@univ.edu',
+                        passwordHash: 'hash_password123',
+                        role: 'Student',
+                        active: true,
+                        createdAt: '2026-09-02'
+                    },
+                    {
+                        userId: 'U-103',
+                        name: 'K. Nguyen',
+                        universityEmail: 'knguyen@univ.edu',
+                        passwordHash: 'hash_password123',
+                        role: 'Student',
+                        active: true,
+                        createdAt: '2026-09-03'
+                    },
+                    {
+                        userId: 'U-201',
+                        name: 'M. Lopez',
+                        universityEmail: 'mlopez@univ.edu',
+                        passwordHash: 'hash_password123',
+                        role: 'Staff',
+                        active: true,
+                        createdAt: '2026-08-15'
+                    },
+                    {
+                        userId: 'U-301',
+                        name: 'System Admin',
+                        universityEmail: 'admin@univ.edu',
+                        passwordHash: 'hash_password123',
+                        role: 'Administrator',
+                        active: true,
+                        createdAt: '2026-08-01'
+                    }
+                ],
+                itemReports: [
+                    {
+                        reportId: '1042',
+                        reporterId: 'U-102',
+                        type: 'Found',
+                        name: 'Black backpack',
+                        category: 'Bags',
+                        location: 'Library, 2nd floor',
+                        itemDate: '2026-09-24',
+                        description: 'Black North Face backpack, some notebooks inside.',
+                        photoRef: 'backpack.jpg',
+                        status: 'Claim pending'
+                    },
+                    {
+                        reportId: '1043',
+                        reporterId: 'U-101',
+                        type: 'Lost',
+                        name: 'AirPods case',
+                        category: 'Electronics',
+                        location: 'Student Center',
+                        itemDate: '2026-09-25',
+                        description: 'White Apple AirPods Pro charging case lost near food court.',
+                        photoRef: '',
+                        status: 'Open'
+                    },
+                    {
+                        reportId: '1044',
+                        reporterId: 'U-103',
+                        type: 'Found',
+                        name: 'Car keys (Toyota)',
+                        category: 'Keys',
+                        location: 'Parking Lot C',
+                        itemDate: '2026-09-26',
+                        description: 'Toyota key fob on a silver ring turned in to Student Center.',
+                        photoRef: 'toyota_keys.jpg',
+                        status: 'Claim pending'
+                    },
+                    {
+                        reportId: '1045',
+                        reporterId: 'U-101',
+                        type: 'Found',
+                        name: 'Blue water bottle',
+                        category: 'Other',
+                        location: 'Gym',
+                        itemDate: '2026-09-27',
+                        description: '32oz insulated blue metal water bottle found by bleachers.',
+                        photoRef: 'blue_bottle.jpg',
+                        status: 'Claim pending'
+                    }
+                ],
+                claims: [
+                    {
+                        claimId: 'C-201',
+                        reportId: '1042',
+                        claimantId: 'U-101',
+                        evidence: 'Red climbing clip on the zipper',
+                        status: 'Pending',
+                        submittedAt: '2026-09-25',
+                        reviewerId: null,
+                        decisionAt: null,
+                        returnedAt: null,
+                        returnedBy: null
+                    },
+                    {
+                        claimId: 'C-202',
+                        reportId: '1044',
+                        claimantId: 'U-102',
+                        evidence: 'Blue lanyard',
+                        status: 'Pending',
+                        submittedAt: '2026-09-27',
+                        reviewerId: null,
+                        decisionAt: null,
+                        returnedAt: null,
+                        returnedBy: null
+                    },
+                    {
+                        claimId: 'C-203',
+                        reportId: '1045',
+                        claimantId: 'U-103',
+                        evidence: 'Sticker of a cat',
+                        status: 'Pending',
+                        submittedAt: '2026-09-28',
+                        reviewerId: null,
+                        decisionAt: null,
+                        returnedAt: null,
+                        returnedBy: null
+                    }
+                ],
+                notifications: []
+            };
+        }
+
+        let appState = null;
+
+        function saveState(stateToSave) {
+            const targetState = stateToSave || appState;
+            if (stateToSave && appState !== null) {
+                appState = stateToSave;
+            }
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(targetState));
+            } catch (e) {
+                console.error('Failed to save to localStorage:', e);
+            }
+        }
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    return JSON.parse(raw);
+                }
+            } catch (e) {
+                console.error('Failed to read localStorage:', e);
+            }
+            const initial = getInitialDemoState();
+            saveState(initial);
+            return initial;
+        }
+
+        appState = loadState();
+
+        // Sync across multiple open browser windows/tabs automatically
+        window.addEventListener('storage', function(event) {
+            if (event.key === STORAGE_KEY) {
+                appState = loadState();
+                renderAll();
+                showStatus('Data synchronized from another browser tab.', 'info');
+            }
+        });
+
+        function resetDemoData() {
+            appState = getInitialDemoState();
+            saveState();
+            renderAll();
+            showStatus('Demo database reset to initial Assignment 1 & 2 state.', 'success');
+        }
+
+        // Helper functions for looking up entities
+        function findUserById(userId) {
+            return appState.users.find(u => u.userId === userId) || null;
+        }
+
+        function findReportById(reportId) {
+            return appState.itemReports.find(r => r.reportId === String(reportId)) || null;
+        }
+
+        function findClaimById(claimId) {
+            return appState.claims.find(c => c.claimId === claimId) || null;
+        }
+
+        function getTodayFormatted() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        // Status Banner UI (no browser alert())
+        function showStatus(message, type) {
+            const banner = document.getElementById('status-banner');
+            const textEl = document.getElementById('status-text');
+            banner.classList.remove('hidden', 'error', 'success');
+            if (type === 'error') {
+                banner.classList.add('error');
+            } else if (type === 'success') {
+                banner.classList.add('success');
+            }
+            textEl.textContent = message;
+        }
+
+        function clearStatusBanner() {
+            document.getElementById('status-banner').classList.add('hidden');
+        }
+
+        // Top-level Tab Switching (Tab 1: User vs Tab 2: Admin)
+        function switchTab(tabName) {
+            const userView = document.getElementById('view-user');
+            const adminView = document.getElementById('view-admin');
+            const btnUser = document.getElementById('tab-btn-user');
+            const btnAdmin = document.getElementById('tab-btn-admin');
+
+            if (tabName === 'admin') {
+                userView.classList.add('hidden');
+                adminView.classList.remove('hidden');
+                btnUser.classList.remove('active');
+                btnAdmin.classList.add('active');
+            } else {
+                adminView.classList.add('hidden');
+                userView.classList.remove('hidden');
+                btnAdmin.classList.remove('active');
+                btnUser.classList.add('active');
+            }
+            renderAll();
+        }
+
+        /* =====================================================================
+         * BOUNDARY: EmailGateway (Assignment 2 Page 5 & Page 19)
+         * ===================================================================== */
+        const EmailGateway = {
+            senderAddress: 'lostandfound@univ.edu',
+            serviceEndpoint: 'smtp://mail.univ.edu',
+
+            sendDecisionEmail: function(claim, item, recipientUser, decision) {
+                let messageText = '';
+                if (decision === 'Approved') {
+                    messageText = 'Your claim (' + claim.claimId + ') for "' + item.name + '" has been APPROVED. Please bring your Student ID to the Student Center Lost & Found Office to pick up your item.';
+                } else {
+                    messageText = 'Your claim (' + claim.claimId + ') for "' + item.name + '" was REJECTED because the provided description did not match the item held at the office.';
+                }
+
+                // Create Notification entity (Queued -> Sent per Sequence Diagram UC6 steps 9-12)
+                const notifId = 'N-' + appState.nextNotifNum++;
+                const notification = {
+                    notificationId: notifId,
+                    claimId: claim.claimId,
+                    recipientId: recipientUser ? recipientUser.userId : claim.claimantId,
+                    recipientEmail: recipientUser ? recipientUser.universityEmail : 'unknown@univ.edu',
+                    itemName: item.name,
+                    decision: decision,
+                    deliveryStatus: 'Sent',
+                    createdAt: getTodayFormatted(),
+                    sentAt: getTodayFormatted(),
+                    message: messageText
+                };
+
+                appState.notifications.unshift(notification);
+                return notification;
+            }
+        };
+
+        /* =====================================================================
+         * CONTROL & BOUNDARY: UC1 Register Account & UC2 Log In
+         * ===================================================================== */
+        const AccountController = {
+            universityDomain: '@univ.edu',
+
+            emailExists: function(email) {
+                return appState.users.some(u => u.universityEmail.toLowerCase() === email.toLowerCase());
+            },
+
+            validateAndHashPassword: function(password) {
+                if (!password || password.trim().length < 4) {
+                    return null;
+                }
+                return 'hash_' + password.trim();
+            },
+
+            register: function(name, email, password) {
+                if (!name || !email || !password) {
+                    return { ok: false, error: 'All registration fields (Name, University Email, Password) are required.' };
+                }
+                const cleanEmail = email.trim().toLowerCase();
+                if (!cleanEmail.endsWith(this.universityDomain)) {
+                    return { ok: false, error: 'Registration failed: Email must end with ' + this.universityDomain };
+                }
+                if (this.emailExists(cleanEmail)) {
+                    return { ok: false, error: 'Registration failed: An account with this university email already exists.' };
+                }
+                const hash = this.validateAndHashPassword(password);
+                if (!hash) {
+                    return { ok: false, error: 'Registration failed: Password must be at least 4 characters.' };
+                }
+
+                const newUser = {
+                    userId: 'U-' + appState.nextUserNum++,
+                    name: name.trim(),
+                    universityEmail: cleanEmail,
+                    passwordHash: hash,
+                    role: 'Student',
+                    active: true,
+                    createdAt: getTodayFormatted()
+                };
+                appState.users.push(newUser);
+                appState.activeStudentId = newUser.userId;
+                saveState();
+                return { ok: true, user: newUser };
+            },
+
+            login: function(email, password) {
+                const cleanEmail = (email || '').trim().toLowerCase();
+                const user = appState.users.find(u => u.universityEmail.toLowerCase() === cleanEmail);
+                if (!user) {
+                    return { ok: false, error: 'Login failed: Account not found.' };
+                }
+                if (!user.active) {
+                    return { ok: false, error: 'Login failed: This account has been deactivated by an Administrator.' };
+                }
+                if (!password || password.trim() === '') {
+                    return { ok: false, error: 'Login failed: Please enter a password.' };
+                }
+                return { ok: true, user: user };
+            }
+        };
+
+        const AccountUI = {
+            toggleAuthPanel: function() {
+                const panel = document.getElementById('auth-panel');
+                panel.classList.toggle('hidden');
+            },
+
+            switchActiveStudent: function(userId) {
+                const user = findUserById(userId);
+                if (user && !user.active) {
+                    showStatus('Cannot switch to ' + user.name + ': Account is deactivated.', 'error');
+                    renderAll();
+                    return;
+                }
+                appState.activeStudentId = userId;
+                saveState();
+                renderAll();
+                if (user) {
+                    showStatus('Active student session switched to ' + user.name + ' (' + user.universityEmail + ').', 'info');
+                }
+            },
+
+            submitRegistration: function() {
+                const name = document.getElementById('reg-name').value;
+                const email = document.getElementById('reg-email').value;
+                const password = document.getElementById('reg-password').value;
+
+                const res = AccountController.register(name, email, password);
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+
+                document.getElementById('reg-name').value = '';
+                document.getElementById('reg-email').value = '';
+                document.getElementById('reg-password').value = '';
+                document.getElementById('auth-panel').classList.add('hidden');
+                renderAll();
+                showStatus('UC1 Register Account Succeeded: Created active Student account for ' + res.user.name + ' (' + res.user.universityEmail + ').', 'success');
+            },
+
+            submitLogin: function() {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                const res = AccountController.login(email, password);
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+
+                document.getElementById('auth-panel').classList.add('hidden');
+                if (res.user.role === 'Staff' || res.user.role === 'Administrator') {
+                    switchTab('admin');
+                    showStatus('UC2 Log In Succeeded: Logged in as ' + res.user.name + ' (' + res.user.role + '). Redirected to Staff & Admin Portal.', 'success');
+                } else {
+                    appState.activeStudentId = res.user.userId;
+                    saveState();
+                    renderAll();
+                    showStatus('UC2 Log In Succeeded: Logged in as Student ' + res.user.name + ' (' + res.user.universityEmail + ').', 'success');
+                }
+            }
+        };
+
+        /* =====================================================================
+         * CONTROL & BOUNDARY: UC3 Report Item
+         * ===================================================================== */
+        const ReportController = {
+            maxPhotoBytes: 5242880, // 5 MB per Assignment 1 & 2
+
+            postReport: function(reporterId, type, name, category, location, itemDate, description, photoRef) {
+                const reporter = findUserById(reporterId);
+                if (!reporter || !reporter.active) {
+                    return { ok: false, error: 'Unauthorized: Reporting user account is inactive or invalid.' };
+                }
+                if (!name || !name.trim()) {
+                    return { ok: false, error: 'Validation Error: Item name is required.' };
+                }
+                if (!category || !location || !itemDate) {
+                    return { ok: false, error: 'Validation Error: Category, Location, and Date are required.' };
+                }
+                if (!description || !description.trim()) {
+                    return { ok: false, error: 'Validation Error: Please enter an item description.' };
+                }
+
+                const newReport = {
+                    reportId: String(appState.nextReportNum++),
+                    reporterId: reporterId,
+                    type: type === 'Found' ? 'Found' : 'Lost',
+                    name: name.trim(),
+                    category: category,
+                    location: location.trim(),
+                    itemDate: itemDate,
+                    description: description.trim(),
+                    photoRef: photoRef ? photoRef.trim() : '',
+                    status: 'Open'
+                };
+
+                appState.itemReports.unshift(newReport);
+                saveState();
+                return { ok: true, report: newReport };
+            }
+        };
+
+        const ReportUI = {
+            submitUserReport: function() {
+                const typeRadios = document.getElementsByName('user-report-type');
+                let selectedType = 'Lost';
+                for (let i = 0; i < typeRadios.length; i++) {
+                    if (typeRadios[i].checked) {
+                        selectedType = typeRadios[i].value;
+                        break;
+                    }
+                }
+
+                const name = document.getElementById('user-item-name').value;
+                const category = document.getElementById('user-item-category').value;
+                const location = document.getElementById('user-item-location').value;
+                const itemDate = document.getElementById('user-item-date').value || getTodayFormatted();
+                const desc = document.getElementById('user-item-desc').value;
+                const photo = document.getElementById('user-item-photo').value;
+
+                const res = ReportController.postReport(
+                    appState.activeStudentId,
+                    selectedType,
+                    name,
+                    category,
+                    location,
+                    itemDate,
+                    desc,
+                    photo
+                );
+
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+
+                this.clearUserForm();
+                renderAll();
+                showStatus(
+                    'UC3 Report Item Succeeded: Created Open ' + res.report.type.toUpperCase() + ' report #' + res.report.reportId + ' ("' + res.report.name + '"). It is now visible in search results and the Admin portal.',
+                    'success'
+                );
+            },
+
+            clearUserForm: function() {
+                document.getElementById('user-item-name').value = '';
+                document.getElementById('user-item-desc').value = '';
+                document.getElementById('user-item-photo').value = '';
+                document.getElementById('user-item-date').value = getTodayFormatted();
+            },
+
+            submitAdminReport: function() {
+                const type = document.getElementById('admin-item-type').value;
+                const name = document.getElementById('admin-item-name').value;
+                const category = document.getElementById('admin-item-category').value;
+                const location = document.getElementById('admin-item-location').value;
+                const desc = document.getElementById('admin-item-desc').value;
+
+                const res = ReportController.postReport(
+                    'U-201', // Staff M. Lopez
+                    type,
+                    name,
+                    category,
+                    location,
+                    getTodayFormatted(),
+                    desc,
+                    ''
+                );
+
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+
+                document.getElementById('admin-item-name').value = '';
+                document.getElementById('admin-item-desc').value = '';
+                renderAll();
+                showStatus(
+                    'Staff Desk Report Saved: Logged ' + res.report.type.toUpperCase() + ' item #' + res.report.reportId + ' ("' + res.report.name + '") with status Open.',
+                    'success'
+                );
+            }
+        };
+
+        /* =====================================================================
+         * CONTROL & BOUNDARY: UC4 Search Items & UC5 Claim Items
+         * ===================================================================== */
+        const SearchController = {
+            findMatchingReports: function(keyword, categoryFilter, typeFilter, statusFilter) {
+                const kw = (keyword || '').trim().toLowerCase();
+                return appState.itemReports.filter(item => {
+                    const matchesKw = !kw ||
+                        item.name.toLowerCase().includes(kw) ||
+                        item.description.toLowerCase().includes(kw) ||
+                        item.location.toLowerCase().includes(kw) ||
+                        item.reportId.toLowerCase().includes(kw);
+
+                    const matchesCat = !categoryFilter || categoryFilter === 'ALL' || item.category === categoryFilter;
+                    const matchesType = !typeFilter || typeFilter === 'ALL' || item.type === typeFilter;
+                    const matchesStatus = !statusFilter || statusFilter === 'ALL' || item.status === statusFilter;
+
+                    return matchesKw && matchesCat && matchesType && matchesStatus;
+                });
+            },
+
+            getDetails: function(reportId) {
+                return findReportById(reportId);
+            }
+        };
+
+        const ClaimController = {
+            // Assignment 2 Page 16 & 17 Sequence Diagram UC5: Claim Items
+            claimItem: function(userId, reportId, evidence) {
+                // 3. checkActiveStudent()
+                const student = findUserById(userId);
+                if (!student || !student.active) {
+                    return { ok: false, error: 'Claim rejected: Active student session required.' };
+                }
+
+                // Validate evidence input
+                if (!evidence || !evidence.trim()) {
+                    return { ok: false, error: 'Claim rejected: Please describe something that proves the item belongs to you.' };
+                }
+
+                // 5. checkFoundAndClaimable()
+                const report = findReportById(reportId);
+                if (!report) {
+                    return { ok: false, error: 'Claim rejected: Item report not found.' };
+                }
+                if (report.type !== 'Found') {
+                    return { ok: false, error: 'Claim rejected: Only FOUND reports can receive ownership claims (Lost reports cannot be claimed).' };
+                }
+                if (report.status === 'Returned') {
+                    return { ok: false, error: 'Claim rejected: This item has already been Returned to its owner.' };
+                }
+
+                // Check if an Approved claim already exists for this item (Assignment 2 Page 1 & 16)
+                const hasApprovedClaim = appState.claims.some(
+                    c => c.reportId === report.reportId && (c.status === 'Approved' || c.status === 'Fulfilled')
+                );
+                if (hasApprovedClaim) {
+                    return { ok: false, error: 'Claim rejected: Another claim on this item has already been approved for pickup.' };
+                }
+
+                // 7. checkDuplicate(userId, reportId)
+                const duplicateClaim = appState.claims.some(
+                    c => c.reportId === report.reportId &&
+                         c.claimantId === userId &&
+                         (c.status === 'Pending' || c.status === 'Approved')
+                );
+                if (duplicateClaim) {
+                    return { ok: false, error: 'Claim rejected: You already have an active Pending claim for this item.' };
+                }
+
+                // 9. createPendingClaim()
+                const newClaim = {
+                    claimId: 'C-' + appState.nextClaimNum++,
+                    reportId: report.reportId,
+                    claimantId: userId,
+                    evidence: evidence.trim(),
+                    status: 'Pending',
+                    submittedAt: getTodayFormatted(),
+                    reviewerId: null,
+                    decisionAt: null,
+                    returnedAt: null,
+                    returnedBy: null
+                };
+                appState.claims.push(newClaim);
+
+                // 10. setClaimPending()
+                report.status = 'Claim pending';
+                saveState();
+
+                return { ok: true, claim: newClaim, report: report };
+            }
+        };
+
+        const SearchUI = {
+            runSearch: function() {
+                const kw = document.getElementById('search-keyword').value;
+                const cat = document.getElementById('search-category').value;
+                const type = document.getElementById('search-type').value;
+                const status = document.getElementById('search-status').value;
+
+                const results = SearchController.findMatchingReports(kw, cat, type, status);
+                this.renderResultsTable(results);
+            },
+
+            resetFilters: function() {
+                document.getElementById('search-keyword').value = '';
+                document.getElementById('search-category').value = 'ALL';
+                document.getElementById('search-type').value = 'ALL';
+                document.getElementById('search-status').value = 'ALL';
+                this.runSearch();
+            },
+
+            selectReport: function(reportId) {
+                appState.selectedReportIdForDetails = String(reportId);
+                this.renderDetailsPanel();
+            },
+
+            closeDetails: function() {
+                appState.selectedReportIdForDetails = null;
+                this.renderDetailsPanel();
+            },
+
+            renderDetailsPanel: function() {
+                const panel = document.getElementById('item-details-panel');
+                if (!appState.selectedReportIdForDetails) {
+                    panel.classList.add('hidden');
+                    panel.innerHTML = '';
+                    return;
+                }
+
+                const item = SearchController.getDetails(appState.selectedReportIdForDetails);
+                if (!item) {
+                    panel.classList.add('hidden');
+                    return;
+                }
+
+                const typeBadgeClass = item.type === 'Found' ? 'badge-found' : 'badge-lost';
+                const hasApproved = appState.claims.some(c => c.reportId === item.reportId && c.status === 'Approved');
+                const canClaim = item.type === 'Found' && item.status !== 'Returned' && !hasApproved;
+
+                let claimSectionHtml = '';
+                if (canClaim) {
+                    claimSectionHtml = `
+                        <div class="claim-box">
+                            <strong>Is this yours? Describe something that proves it is yours (UC5 - ClaimUI):</strong>
+                            <div style="display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+                                <input type="text" id="detail-claim-evidence-${item.reportId}" placeholder="e.g. what is attached to it, sticker, initials..." style="flex: 1; min-width: 220px;">
+                                <button type="button" class="btn-primary" onclick="ClaimUI.submitFromDetails('${item.reportId}')">Claim This Item</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (item.type === 'Lost') {
+                    claimSectionHtml = `<div class="claim-box"><em>Note: This is a LOST (missing item) report. Only FOUND items held at the office can be claimed.</em></div>`;
+                } else {
+                    claimSectionHtml = `<div class="claim-box"><em>This item is no longer accepting claims (Status: ${escapeHtml(item.status)}).</em></div>`;
+                }
+
+                panel.classList.remove('hidden');
+                panel.innerHTML = `
+                    <div style="margin-bottom: 8px;">
+                        <button type="button" class="btn-small" onclick="SearchUI.closeDetails()">&lt; Back to results</button>
+                    </div>
+                    <div class="details-flex">
+                        <div class="wireframe-photo-box">
+                            ${item.photoRef ? 'Photo:<br><strong>' + escapeHtml(item.photoRef) + '</strong>' : 'Item photo<br>(No photo uploaded)'}
+                        </div>
+                        <div style="flex: 1; min-width: 260px;">
+                            <h3 style="margin: 0 0 6px 0; font-size: 18px;">
+                                ${escapeHtml(item.name)}
+                                <span class="badge ${typeBadgeClass}" style="margin-left: 6px;">${escapeHtml(item.type)}</span>
+                            </h3>
+                            <div><strong>Report ID:</strong> #${escapeHtml(item.reportId)}</div>
+                            <div><strong>Category:</strong> ${escapeHtml(item.category)}</div>
+                            <div><strong>${item.type === 'Found' ? 'Found at:' : 'Lost at:'}</strong> ${escapeHtml(item.location)}</div>
+                            <div><strong>Date:</strong> ${escapeHtml(item.itemDate)}</div>
+                            <div><strong>Status:</strong> ${escapeHtml(item.status)}</div>
+                            ${item.type === 'Found' ? '<div><strong>Held at:</strong> Lost &amp; Found Office, Student Center</div>' : ''}
+                            <div style="margin-top: 6px;"><strong>Description:</strong> ${escapeHtml(item.description)}</div>
+                            ${claimSectionHtml}
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderResultsTable: function(items) {
+                const tbody = document.getElementById('user-items-tbody');
+                if (!items || items.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 14px;">No matching item reports found. Try clearing your search filters.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = items.map(item => {
+                    const typeBadge = item.type === 'Found'
+                        ? `<span class="badge badge-found">FOUND</span>`
+                        : `<span class="badge badge-lost">LOST</span>`;
+
+                    let statusBadge = `<span class="badge badge-open">Open</span>`;
+                    if (item.status === 'Claim pending') {
+                        statusBadge = `<span class="badge badge-pending">Claim pending</span>`;
+                    } else if (item.status === 'Returned') {
+                        statusBadge = `<span class="badge badge-returned">Returned</span>`;
+                    }
+
+                    const hasApproved = appState.claims.some(c => c.reportId === item.reportId && c.status === 'Approved');
+                    const canClaim = item.type === 'Found' && item.status !== 'Returned' && !hasApproved;
+
+                    let actionHtml = `<button type="button" class="btn-small" onclick="SearchUI.selectReport('${item.reportId}')">View Details</button>`;
+                    if (canClaim) {
+                        actionHtml = `
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <div style="display: flex; gap: 4px;">
+                                    <input type="text" id="inline-evidence-${item.reportId}" placeholder="Proof of ownership..." style="padding: 3px 6px; font-size: 12px;">
+                                    <button type="button" class="btn-primary btn-small" onclick="ClaimUI.submitInline('${item.reportId}')">Claim</button>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn-small" onclick="SearchUI.selectReport('${item.reportId}')">Open Item Page</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    return `
+                        <tr>
+                            <td><strong>#${escapeHtml(item.reportId)}</strong></td>
+                            <td>${typeBadge}</td>
+                            <td><strong>${escapeHtml(item.name)}</strong></td>
+                            <td>${escapeHtml(item.category)}</td>
+                            <td>${escapeHtml(item.location)}</td>
+                            <td>${escapeHtml(item.itemDate)}</td>
+                            <td>${escapeHtml(item.description)}</td>
+                            <td>${statusBadge}</td>
+                            <td>${actionHtml}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        };
+
+        const ClaimUI = {
+            submitInline: function(reportId) {
+                const input = document.getElementById('inline-evidence-' + reportId);
+                const evidence = input ? input.value : '';
+                this.processClaim(reportId, evidence);
+            },
+
+            submitFromDetails: function(reportId) {
+                const input = document.getElementById('detail-claim-evidence-' + reportId);
+                const evidence = input ? input.value : '';
+                this.processClaim(reportId, evidence);
+            },
+
+            processClaim: function(reportId, evidence) {
+                const res = ClaimController.claimItem(appState.activeStudentId, reportId, evidence);
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+                renderAll();
+                showStatus(
+                    'UC5 Claim Submitted: Claim ' + res.claim.claimId + ' for "' + res.report.name + '" is now Pending staff review, and Item Status is set to "Claim pending".',
+                    'success'
+                );
+            }
+        };
+
+        /* =====================================================================
+         * CONTROL & BOUNDARY: UC6 Review Claim & Record Item Return (Staff)
+         * ===================================================================== */
+        const ReviewController = {
+            staffId: 'U-201', // M. Lopez
+
+            // Assignment 2 Page 7 & Page 18-19: Approve or Reject a Pending claim
+            review: function(claimId, decision) {
+                const claim = findClaimById(claimId);
+                if (!claim) {
+                    return { ok: false, error: 'Claim not found.' };
+                }
+                if (claim.status !== 'Pending') {
+                    return { ok: false, error: 'Only Pending claims can be approved or rejected.' };
+                }
+
+                const report = findReportById(claim.reportId);
+                if (!report) {
+                    return { ok: false, error: 'Associated item report not found.' };
+                }
+
+                const claimant = findUserById(claim.claimantId);
+
+                if (decision === 'Approved') {
+                    // Save approval on Claim; ItemReport stays 'Claim pending' until pickup (Assignment 2 Page 1 & 7)
+                    claim.status = 'Approved';
+                    claim.reviewerId = this.staffId;
+                    claim.decisionAt = getTodayFormatted();
+                    report.status = 'Claim pending';
+
+                    // Send approval email notification via EmailGateway
+                    EmailGateway.sendDecisionEmail(claim, report, claimant, 'Approved');
+
+                    // Assignment 2 Page 7: "Approval rejects competing Pending claims and queues their decision emails."
+                    appState.claims.forEach(otherClaim => {
+                        if (otherClaim.reportId === report.reportId && otherClaim.claimId !== claim.claimId && otherClaim.status === 'Pending') {
+                            otherClaim.status = 'Rejected';
+                            otherClaim.reviewerId = this.staffId;
+                            otherClaim.decisionAt = getTodayFormatted();
+                            const otherUser = findUserById(otherClaim.claimantId);
+                            EmailGateway.sendDecisionEmail(otherClaim, report, otherUser, 'Rejected');
+                        }
+                    });
+
+                    saveState();
+                    return {
+                        ok: true,
+                        message: 'UC6 Claim Approved: ' + claim.claimId + ' for "' + report.name + '" approved. Approval email sent to ' + (claimant ? claimant.universityEmail : 'student') + '. Item stays "Claim pending" until pickup.'
+                    };
+                } else {
+                    // Reject claim
+                    claim.status = 'Rejected';
+                    claim.reviewerId = this.staffId;
+                    claim.decisionAt = getTodayFormatted();
+
+                    EmailGateway.sendDecisionEmail(claim, report, claimant, 'Rejected');
+
+                    // Assignment 2 Page 1 & 7 Statechart Guard:
+                    // "Rejection restores Open only when no pending or approved claims remain."
+                    const hasOtherActiveClaims = appState.claims.some(
+                        c => c.reportId === report.reportId && (c.status === 'Pending' || c.status === 'Approved')
+                    );
+                    if (!hasOtherActiveClaims && report.status !== 'Returned') {
+                        report.status = 'Open';
+                    }
+
+                    saveState();
+                    return {
+                        ok: true,
+                        message: 'UC6 Claim Rejected: ' + claim.claimId + ' marked Rejected and email sent. Item #' + report.reportId + ' status is now "' + report.status + '".'
+                    };
+                }
+            },
+
+            // Assignment 2 Page 7 & 19: Record Pickup / Mark Item as Returned
+            recordPickupByClaim: function(claimId, idVerified) {
+                if (!idVerified) {
+                    return { ok: false, error: 'Guard [approved claim + ID checked] failed: Please confirm Student Photo ID was checked at the counter.' };
+                }
+
+                const claim = findClaimById(claimId);
+                if (!claim) {
+                    return { ok: false, error: 'Claim not found.' };
+                }
+                if (claim.status !== 'Approved') {
+                    return { ok: false, error: 'Pickup blocked: Claim must be Approved before recording pickup.' };
+                }
+
+                const report = findReportById(claim.reportId);
+                if (!report) {
+                    return { ok: false, error: 'Item report not found.' };
+                }
+
+                // Step 15 & 16 of UC6 Sequence Diagram: setFulfilled() and setReturned()
+                claim.status = 'Fulfilled';
+                claim.returnedAt = getTodayFormatted();
+                claim.returnedBy = this.staffId;
+                report.status = 'Returned';
+
+                saveState();
+                return {
+                    ok: true,
+                    message: 'UC6 Pickup Recorded: Claim ' + claim.claimId + ' is now Fulfilled and Item #' + report.reportId + ' ("' + report.name + '") is marked Returned.'
+                };
+            },
+
+            // Direct Staff/Admin action to mark any item as Returned (or Reopen it) from the Items table
+            markItemReturnedDirect: function(reportId, idVerified) {
+                if (!idVerified) {
+                    return { ok: false, error: 'Please check "Student Photo ID Checked at Office Counter" before marking an item as Returned.' };
+                }
+                const report = findReportById(reportId);
+                if (!report) {
+                    return { ok: false, error: 'Item report not found.' };
+                }
+
+                report.status = 'Returned';
+
+                // Also fulfill any Approved or Pending claim on this item
+                appState.claims.forEach(c => {
+                    if (c.reportId === report.reportId && (c.status === 'Approved' || c.status === 'Pending')) {
+                        c.status = 'Fulfilled';
+                        c.returnedAt = getTodayFormatted();
+                        c.returnedBy = this.staffId;
+                    }
+                });
+
+                saveState();
+                return {
+                    ok: true,
+                    message: 'Item #' + report.reportId + ' ("' + report.name + '") marked as Returned.'
+                };
+            },
+
+            reopenItem: function(reportId) {
+                const report = findReportById(reportId);
+                if (!report) {
+                    return { ok: false, error: 'Item report not found.' };
+                }
+                report.status = 'Open';
+                saveState();
+                return {
+                    ok: true,
+                    message: 'Item #' + report.reportId + ' ("' + report.name + '") status reset to Open.'
+                };
+            }
+        };
+
+        const StaffClaimsUI = {
+            approve: function(claimId) {
+                const res = ReviewController.review(claimId, 'Approved');
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+                renderAll();
+                showStatus(res.message, 'success');
+            },
+
+            reject: function(claimId) {
+                const res = ReviewController.review(claimId, 'Rejected');
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+                renderAll();
+                showStatus(res.message, 'success');
+            },
+
+            markReturnedFromClaim: function(claimId) {
+                const idChecked = document.getElementById('staff-id-verified-checkbox').checked;
+                const res = ReviewController.recordPickupByClaim(claimId, idChecked);
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+                renderAll();
+                showStatus(res.message, 'success');
+            },
+
+            markItemReturned: function(reportId) {
+                const idChecked = document.getElementById('staff-id-verified-checkbox').checked;
+                const res = ReviewController.markItemReturnedDirect(reportId, idChecked);
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+                renderAll();
+                showStatus(res.message, 'success');
+            },
+
+            reopenItem: function(reportId) {
+                const res = ReviewController.reopenItem(reportId);
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+                renderAll();
+                showStatus(res.message, 'info');
+            },
+
+            renderAdminItemsTable: function() {
+                const filterStatus = document.getElementById('admin-filter-status').value;
+                const tbody = document.getElementById('admin-items-tbody');
+
+                const filtered = appState.itemReports.filter(item => {
+                    return filterStatus === 'ALL' || item.status === filterStatus;
+                });
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 12px;">No items match the selected filter.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = filtered.map(item => {
+                    const reporter = findUserById(item.reporterId);
+                    const reporterLabel = reporter ? (reporter.name + ' (' + reporter.universityEmail + ')') : item.reporterId;
+
+                    const typeBadge = item.type === 'Found'
+                        ? `<span class="badge badge-found">FOUND</span>`
+                        : `<span class="badge badge-lost">LOST</span>`;
+
+                    let statusBadge = `<span class="badge badge-open">Open</span>`;
+                    if (item.status === 'Claim pending') {
+                        statusBadge = `<span class="badge badge-pending">Claim pending</span>`;
+                    } else if (item.status === 'Returned') {
+                        statusBadge = `<span class="badge badge-returned">Returned</span>`;
+                    }
+
+                    let actionsHtml = '';
+                    if (item.status !== 'Returned') {
+                        actionsHtml = `
+                            <button type="button" class="btn-approve btn-small" onclick="StaffClaimsUI.markItemReturned('${item.reportId}')">
+                                Mark as Returned
+                            </button>
+                        `;
+                    } else {
+                        actionsHtml = `
+                            <span style="font-size: 12px; color: #2e6f3e; font-weight: bold;">Returned to Owner</span>
+                            <button type="button" class="btn-small" style="margin-left: 6px;" onclick="StaffClaimsUI.reopenItem('${item.reportId}')">
+                                Reopen
+                            </button>
+                        `;
+                    }
+
+                    return `
+                        <tr>
+                            <td><strong>#${escapeHtml(item.reportId)}</strong></td>
+                            <td>${typeBadge}</td>
+                            <td>
+                                <strong>${escapeHtml(item.name)}</strong>
+                                <div style="font-size: 11px; color: #555555;">${escapeHtml(item.description)}</div>
+                            </td>
+                            <td>${escapeHtml(item.category)}</td>
+                            <td>${escapeHtml(item.location)}</td>
+                            <td>${escapeHtml(item.itemDate)}</td>
+                            <td>${escapeHtml(reporterLabel)}</td>
+                            <td>${statusBadge}</td>
+                            <td>${actionsHtml}</td>
+                        </tr>
+                    `;
+                }).join('');
+            },
+
+            renderClaimsTable: function() {
+                const tbody = document.getElementById('admin-claims-tbody');
+                const heading = document.getElementById('pending-claims-heading');
+
+                const pendingCount = appState.claims.filter(c => c.status === 'Pending').length;
+                heading.textContent = '2. Pending Claims (' + pendingCount + ') & Claim Review History (UC6)';
+
+                if (appState.claims.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 12px;">No claims submitted yet.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = appState.claims.map(claim => {
+                    const item = findReportById(claim.reportId);
+                    const itemName = item ? item.name + ' (#' + item.reportId + ')' : 'Report #' + claim.reportId;
+                    const claimant = findUserById(claim.claimantId);
+                    const claimantName = claimant ? (claimant.name + ' (' + claimant.universityEmail + ')') : claim.claimantId;
+
+                    let actionButtons = '';
+                    if (claim.status === 'Pending') {
+                        actionButtons = `
+                            <button type="button" class="btn-approve btn-small" onclick="StaffClaimsUI.approve('${claim.claimId}')">Approve</button>
+                            <button type="button" class="btn-reject btn-small" onclick="StaffClaimsUI.reject('${claim.claimId}')">Reject</button>
+                        `;
+                    } else if (claim.status === 'Approved') {
+                        actionButtons = `
+                            <button type="button" class="btn-primary btn-small" onclick="StaffClaimsUI.markReturnedFromClaim('${claim.claimId}')">
+                                Mark as Returned (Pickup)
+                            </button>
+                        `;
+                    } else if (claim.status === 'Fulfilled') {
+                        actionButtons = `<span style="color: #2e6f3e; font-weight: bold;">Picked Up &amp; Returned (${escapeHtml(claim.returnedAt || '')})</span>`;
+                    } else {
+                        actionButtons = `<span style="color: #800000;">Claim Rejected</span>`;
+                    }
+
+                    return `
+                        <tr>
+                            <td><strong>${escapeHtml(claim.claimId)}</strong></td>
+                            <td>${escapeHtml(itemName)}</td>
+                            <td>${escapeHtml(claimantName)}</td>
+                            <td><strong>"${escapeHtml(claim.evidence)}"</strong></td>
+                            <td>${escapeHtml(claim.submittedAt)}</td>
+                            <td><strong>${escapeHtml(claim.status)}</strong></td>
+                            <td>${actionButtons}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        };
+
+        /* =====================================================================
+         * CONTROL & BOUNDARY: UC7 Managing User Accounts (Administrator)
+         * ===================================================================== */
+        const UserAdminController = {
+            adminId: 'U-301',
+
+            findAccounts: function(query) {
+                const q = (query || '').trim().toLowerCase();
+                if (!q) return appState.users;
+                return appState.users.filter(u =>
+                    u.universityEmail.toLowerCase().includes(q) ||
+                    u.name.toLowerCase().includes(q) ||
+                    u.userId.toLowerCase().includes(q)
+                );
+            },
+
+            changeRole: function(targetUserId, newRole) {
+                const user = findUserById(targetUserId);
+                if (!user) {
+                    return { ok: false, error: 'Target user account not found.' };
+                }
+                user.role = newRole;
+                saveState();
+                return { ok: true, user: user };
+            },
+
+            toggleActiveStatus: function(targetUserId) {
+                const user = findUserById(targetUserId);
+                if (!user) {
+                    return { ok: false, error: 'Target user account not found.' };
+                }
+                if (user.role === 'Administrator') {
+                    return { ok: false, error: 'Cannot deactivate the primary Administrator account.' };
+                }
+                user.active = !user.active;
+                saveState();
+                return { ok: true, user: user };
+            }
+        };
+
+        const UserAdminUI = {
+            makeStaff: function(userId) {
+                const res = UserAdminController.changeRole(userId, 'Staff');
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+                renderAll();
+                showStatus('UC7 Role Updated: ' + res.user.name + ' (' + res.user.universityEmail + ') is now assigned the Staff role.', 'success');
+            },
+
+            makeStudent: function(userId) {
+                const res = UserAdminController.changeRole(userId, 'Student');
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+                renderAll();
+                showStatus('UC7 Role Updated: ' + res.user.name + ' (' + res.user.universityEmail + ') is now assigned the Student role.', 'info');
+            },
+
+            toggleActive: function(userId) {
+                const res = UserAdminController.toggleActiveStatus(userId);
+                if (!res.ok) {
+                    showStatus(res.error, 'error');
+                    return;
+                }
+                renderAll();
+                const stateLabel = res.user.active ? 'Activated' : 'Deactivated';
+                showStatus('UC7 Account ' + stateLabel + ': ' + res.user.name + ' (' + res.user.universityEmail + ').', 'info');
+            },
+
+            renderUsers: function() {
+                const query = document.getElementById('admin-user-search').value;
+                const users = UserAdminController.findAccounts(query);
+                const tbody = document.getElementById('admin-users-tbody');
+
+                tbody.innerHTML = users.map(u => {
+                    const activeLabel = u.active
+                        ? `<span style="color: #2e6f3e; font-weight: bold;">Active</span>`
+                        : `<span style="color: #b22222; font-weight: bold;">Deactivated</span>`;
+
+                    let roleActionBtn = '';
+                    if (u.role === 'Student') {
+                        roleActionBtn = `<button type="button" class="btn-primary btn-small" onclick="UserAdminUI.makeStaff('${u.userId}')">Make Staff</button>`;
+                    } else if (u.role === 'Staff') {
+                        roleActionBtn = `<button type="button" class="btn-small" onclick="UserAdminUI.makeStudent('${u.userId}')">Set as Student</button>`;
+                    }
+
+                    let activeBtn = '';
+                    if (u.role !== 'Administrator') {
+                        activeBtn = `<button type="button" class="${u.active ? 'btn-reject' : 'btn-approve'} btn-small" onclick="UserAdminUI.toggleActive('${u.userId}')">${u.active ? 'Deactivate' : 'Activate'}</button>`;
+                    }
+
+                    return `
+                        <tr>
+                            <td><strong>${escapeHtml(u.userId)}</strong></td>
+                            <td>${escapeHtml(u.name)}</td>
+                            <td>${escapeHtml(u.universityEmail)}</td>
+                            <td><strong>${escapeHtml(u.role)}</strong></td>
+                            <td>${activeLabel}</td>
+                            <td>${roleActionBtn} ${activeBtn}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        };
+
+        /* =====================================================================
+         * RENDER HELPERS
+         * ===================================================================== */
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function renderStudentSelector() {
+            const select = document.getElementById('active-student-select');
+            const students = appState.users.filter(u => u.role === 'Student');
+            select.innerHTML = students.map(s => {
+                const selected = s.userId === appState.activeStudentId ? 'selected' : '';
+                const statusSuffix = s.active ? '' : ' [DEACTIVATED]';
+                return `<option value="${escapeHtml(s.userId)}" ${selected}>${escapeHtml(s.name)} (${escapeHtml(s.universityEmail)})${statusSuffix}</option>`;
+            }).join('');
+        }
+
+        function renderNotificationsTable() {
+            const tbody = document.getElementById('user-notifications-tbody');
+            if (!appState.notifications || appState.notifications.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 12px;">No decision emails sent yet. Approve or Reject a claim in Tab 2 to trigger EmailGateway.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = appState.notifications.map(n => {
+                return `
+                    <tr>
+                        <td><strong>${escapeHtml(n.notificationId)}</strong></td>
+                        <td>${escapeHtml(n.claimId)}</td>
+                        <td>${escapeHtml(n.recipientEmail)}</td>
+                        <td>${escapeHtml(n.itemName)}</td>
+                        <td><strong>${escapeHtml(n.decision)}</strong></td>
+                        <td>${escapeHtml(n.deliveryStatus)}</td>
+                        <td>${escapeHtml(n.message)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderAll() {
+            renderStudentSelector();
+            SearchUI.runSearch();
+            SearchUI.renderDetailsPanel();
+            renderNotificationsTable();
+            StaffClaimsUI.renderAdminItemsTable();
+            StaffClaimsUI.renderClaimsTable();
+            UserAdminUI.renderUsers();
+        }
+
+        // Initialize default date field and render on load
+        window.onload = function() {
+            document.getElementById('user-item-date').value = getTodayFormatted();
+            renderAll();
+        };
+    </script>
+</body>
+</html>
