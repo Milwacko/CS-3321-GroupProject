@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusFind - CS 3321</title>
     <style>
-        /* Plain, barebones CSS matching Assignment 1 wireframes */
+        
         * {
             box-sizing: border-box;
         }
@@ -29,7 +29,7 @@
             padding: 0;
         }
 
-        /* Top Header matching Assignment 1 dark blue bar (#2b4c6f) */
+        /* Top Header */
         .top-header {
             background-color: #2b4c6f;
             color: #ffffff;
@@ -101,7 +101,7 @@
             min-height: 85vh;
         }
 
-        /* Status / Feedback Message Box (replaces alert()) */
+        /* Status / Feedback Message Box */
         .status-banner {
             border: 1px solid #2b4c6f;
             background-color: #eef4fa;
@@ -238,7 +238,7 @@
             font-size: 12px;
         }
 
-        /* Standard Plain HTML Tables */
+        /* Tables */
         .table-wrapper {
             overflow-x: auto;
         }
@@ -262,7 +262,7 @@
             background-color: #fafafa;
         }
 
-        /* Wireframe Badges matching Assignment 1 & 2 States */
+        
         .badge {
             display: inline-block;
             padding: 2px 7px;
@@ -371,9 +371,7 @@
             <button type="button" class="btn-small" onclick="ui.clearStatus()">Close</button>
         </div>
 
-        <!-- ================================================================= -->
-        <!-- TAB 1: USER / STUDENT VIEW (UC1, UC2, UC3, UC4, UC5)              -->
-        <!-- ================================================================= -->
+
         <div id="view-user">
 
             <!-- Compact Account / Session Bar (UC1 Register & UC2 Log In) -->
@@ -530,9 +528,7 @@
 
         </div>
 
-        <!-- ================================================================= -->
-        <!-- TAB 2: ADMIN & STAFF VIEW (UC3, UC6, UC7)                         -->
-        <!-- ================================================================= -->
+
         <div id="view-admin" class="hidden">
 
             <!-- Staff / Admin Operator Strip -->
@@ -669,53 +665,32 @@
     </div>
 
     <script>
-        /**
-         * ====================================================================
-         * PROLOGUE COMMENT - CampusFind Object-Oriented Implementation
-         * Artifact   : Inline Application Script (Models, Controllers, Boundary UI)
-         * Authors    : Juan Gomez, Alen Varghese, Otabek Zokirov
-         * Date       : November 18, 2026
-         * Reference  : CS 3321 Assignment 2 Class Diagram & Statecharts
-         * ====================================================================
-         */
 
-        // ====================================================================
-        // 1. ENTITY CLASSES (Assignment 2 Section 1 - Domain Model)
-        // ====================================================================
-
-        /**
-         * Entity: User
-         * Represents Student, Staff, and Administrator accounts.
-         */
         class User {
             constructor({ userId, name, universityEmail, passwordHash, role = 'Student', active = true, createdAt = null }) {
                 this.userId = userId;
                 this.name = name;
                 this.universityEmail = universityEmail;
-                this.passwordHash = passwordHash; // Never stored in plaintext (NFR-7)
-                this.role = role;                 // 'Student' | 'Staff' | 'Administrator'
-                this.active = active;             // Boolean
+                this.passwordHash = passwordHash; 
+                this.role = role;                 
+                this.active = active;            
                 this.createdAt = createdAt || new Date().toISOString();
             }
         }
 
-        /**
-         * Entity: ItemReport
-         * Represents both Lost and Found item reports.
-         * Lifecycle states: 'Open' -> 'ClaimPending' -> 'Returned'
-         */
+
         class ItemReport {
             constructor({ reportId, reporterId, type, name, category, location, itemDate, description, photoRef = null, status = 'Open' }) {
                 this.reportId = reportId;
                 this.reporterId = reporterId;
-                this.type = type;                 // 'Lost' | 'Found'
+                this.type = type;                
                 this.name = name;
                 this.category = category;
                 this.location = location;
                 this.itemDate = itemDate;
                 this.description = description;
                 this.photoRef = photoRef;
-                this.status = status;             // 'Open' | 'ClaimPending' | 'Returned'
+                this.status = status;             
             }
         }
 
@@ -755,9 +730,6 @@
             }
         }
 
-        // ====================================================================
-        // 2. DATA STORE & PERSISTENCE REPOSITORY (Cross-Tab Synchronized)
-        // ====================================================================
 
         class CampusFindStore {
             constructor(storageKey) {
@@ -770,7 +742,7 @@
                 this.load();
             }
 
-            /** Simple deterministic hash helper so passwords are never saved in plaintext */
+            
             static hashPassword(plainPassword) {
                 let hash = 0;
                 for (let i = 0; i < plainPassword.length; i++) {
@@ -780,7 +752,7 @@
                 return 'hash_' + Math.abs(hash).toString(16);
             }
 
-            /** Populates initial seed data matching Assignment 1 & 2 scenarios */
+            /*Populates initial seed data matching Assignment 1 & 2 scenarios */
             seedDefaults() {
                 this.counters = { user: 106, report: 105, claim: 203, notif: 301 };
                 this.users = [
@@ -864,7 +836,7 @@
                 this.save();
             }
 
-            /** Persists serialized entities to localStorage */
+            /** Stores to localStorage */
             save() {
                 const payload = {
                     counters: this.counters,
@@ -876,7 +848,7 @@
                 localStorage.setItem(this.storageKey, JSON.stringify(payload));
             }
 
-            /** Loads entities from localStorage and rehydrates class instances */
+            /** Loads entities from localStorage */
             load() {
                 const raw = localStorage.getItem(this.storageKey);
                 if (!raw) {
@@ -896,11 +868,7 @@
             }
         }
 
-        // ====================================================================
-        // 3. CONTROL & BOUNDARY SERVICE CLASSES (Assignment 2 Section 1)
-        // ====================================================================
 
-        /** Boundary: EmailGateway (simulates external university SMTP delivery) */
         class EmailGateway {
             constructor(senderAddress = 'lostfound@univ.edu') {
                 this.senderAddress = senderAddress;
@@ -915,7 +883,7 @@
             }
         }
 
-        /** Control: AccountController (UC1 Register Account, UC2 Log In / Out) */
+
         class AccountController {
             constructor(store) {
                 this.store = store;
@@ -976,7 +944,7 @@
             }
         }
 
-        /** Control: ReportController (UC3 Report Item) */
+
         class ReportController {
             constructor(store) {
                 this.store = store;
@@ -1013,7 +981,6 @@
             }
         }
 
-        /** Control: SearchController (UC4 Search Items) */
         class SearchController {
             constructor(store) {
                 this.store = store;
@@ -1033,7 +1000,7 @@
             }
         }
 
-        /** Control: ClaimController (UC5 Claim Items) */
+
         class ClaimController {
             constructor(store) {
                 this.store = store;
@@ -1088,7 +1055,7 @@
             }
         }
 
-        /** Control: ReviewController (UC6 Review Claim & Record Pickup) */
+
         class ReviewController {
             constructor(store, emailGateway) {
                 this.store = store;
@@ -1185,7 +1152,7 @@
             }
         }
 
-        /** Control: UserAdminController (UC7 Managing User Accounts) */
+
         class UserAdminController {
             constructor(store) {
                 this.store = store;
@@ -1215,9 +1182,7 @@
             }
         }
 
-        // ====================================================================
-        // 4. BOUNDARY UI COORDINATOR (Renders Views & Handles Events)
-        // ====================================================================
+
 
         class CampusFindUI {
             constructor() {
@@ -1466,7 +1431,7 @@
                     document.getElementById('student-session-label').textContent = 'Signed Out (Log in to report or claim items)';
                 }
 
-                // 1. Render User Items Table (UC4 & UC5)
+
                 const filteredReports = this.searchCtrl.search(
                     document.getElementById('search-keyword').value,
                     document.getElementById('search-category').value,
@@ -1504,7 +1469,7 @@
                     }).join('');
                 }
 
-                // 2. Render Admin Claims Table (UC6)
+
                 const claimsTbody = document.getElementById('admin-claims-tbody');
                 if (this.store.claims.length === 0) {
                     claimsTbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No claims submitted yet.</td></tr>';
@@ -1536,7 +1501,7 @@
                     }).join('');
                 }
 
-                // 3. Render Admin Items Table
+
                 const statusFilter = document.getElementById('admin-filter-status').value;
                 const adminItems = this.store.reports.filter(r => statusFilter === 'ALL' || r.status === statusFilter);
                 const adminTbody = document.getElementById('admin-items-tbody');
@@ -1563,7 +1528,7 @@
                     `).join('');
                 }
 
-                // 4. Render Admin Users Table (UC7)
+
                 const usersTbody = document.getElementById('admin-users-tbody');
                 usersTbody.innerHTML = this.store.users.map(u => `
                     <tr>
@@ -1584,7 +1549,6 @@
             }
         }
 
-        // Instantiate UI Boundary Controller
         const ui = new CampusFindUI();
 
         // Cross-tab browser synchronization: updates a second open browser window automatically
